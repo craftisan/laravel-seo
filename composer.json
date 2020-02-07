@@ -1,0 +1,37 @@
+{
+  "name": "craftisan/laravel-seo",
+  "description": "SEO for Laravel - Generate pages from templates created using data variables to render customized content.",
+  "type": "library",
+  "keywords": [
+    "laravel-admin",
+    "extension"
+  ],
+  "homepage": "https://github.com/craftisan/laravel-seo",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Deekshant Joshi",
+      "email": "deekshant.joshi@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.1.3",
+    "laravel/framework": "5.8.*",
+    "encore/laravel-admin": "^1.7",
+    "spatie/laravel-sitemap": "^5.6",
+    "bensampo/laravel-enum": "^1.26",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Craftisan\\Seo\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Craftisan\\Seo\\SeoServiceProvider"
+      ]
+    }
+  }
+}
