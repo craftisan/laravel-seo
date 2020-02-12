@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2020 Deekshant Joshi
  *
  * @author    Deekshant Joshi (deekshant.joshi@gmail.com)
- * @since     07 February 2020
+ * @since     12 February 2020
  */
 
 namespace Craftisan\Seo;
@@ -21,7 +21,7 @@ class SeoServiceProvider extends ServiceProvider
     {
         // Merge configuration
         $this->mergeConfigFrom(
-            __DIR__ . '../config/seo.php', 'seo'
+            __DIR__ . '/../config/seo.php', 'seo'
         );
     }
 
@@ -36,7 +36,7 @@ class SeoServiceProvider extends ServiceProvider
 
         // Publish configuration
         $this->publishes([
-            __DIR__ . '../config/seo.php' => config_path('seo.php'),
+            __DIR__ . '/../config/seo.php' => config_path('seo.php'),
         ], 'seo');
 
         if ($views = $extension->views()) {
