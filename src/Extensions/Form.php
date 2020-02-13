@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2020 Deekshant Joshi
  *
  * @author    Deekshant Joshi (deekshant.joshi@gmail.com)
- * @since     07 February 2020
+ * @since     13 February 2020
  */
 
 namespace Craftisan\Seo\Extensions;
@@ -72,7 +72,7 @@ class Form extends LaravelAdminForm
             return $response;
         }
 
-        if ($response = $this->ajaxResponse(trans('admin.save_succeeded'))) {
+        if ($response = $this->ajaxResponse(trans('seo.admin.save_succeeded'))) {
             return $response;
         }
 
