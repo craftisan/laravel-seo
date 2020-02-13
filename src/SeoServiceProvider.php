@@ -49,13 +49,13 @@ class SeoServiceProvider extends ServiceProvider
         }
 
         // -------- Publish resources --------
-        // Publish configuration and translations
-        $this->publishes([
-            __DIR__ . '/../config/seo.php' => config_path('seo.php'),
-            __DIR__ . '/../resources/lang' => resource_path('lang'),
-        ], 'seo-admin');
+        // Publish config (required for both admin and web)
+        $this->publishes([__DIR__ . '/../config/seo.php' => config_path('seo.php')], 'seo-config');
 
-        // Publish assets
+        // Publish for Admin
+        $this->publishes([__DIR__ . '/../resources/lang' => resource_path('lang')], 'seo-admin');
+
+        // Publish for web
         if ($this->app->runningInConsole() && $assets = $extension->assets()) {
             $this->publishes(
                 [$assets => public_path('vendor/craftisan/seo')],
