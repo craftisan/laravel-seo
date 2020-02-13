@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2020 Deekshant Joshi
  *
  * @author    Deekshant Joshi (deekshant.joshi@gmail.com)
- * @since     07 February 2020
+ * @since     13 February 2020
  */
 
 namespace Craftisan\Seo\Helpers;
@@ -76,8 +76,8 @@ class SeoTemplateHelper
                 $charCheck = str_replace('_', '', $match2);
                 if (!ctype_alnum($charCheck) && !ctype_lower(preg_replace('/[0-9]+/', '', $charCheck))) {
                     $error = new MessageBag([
-                        'title' => trans('errors.admin.seo.template_error'),
-                        'message' => trans('errors.admin.seo.variable_name_incorrect', ['string' => $string[0]]),
+                        'title' => trans('seo.admin.template_error'),
+                        'message' => trans('seo.admin.variable_name_incorrect', ['string' => $string[0]]),
                     ]);
 
                     return back()->with(compact('error'))->withInput();

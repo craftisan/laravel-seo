@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2020 Deekshant Joshi
  *
  * @author    Deekshant Joshi (deekshant.joshi@gmail.com)
- * @since     07 February 2020
+ * @since     13 February 2020
  */
 
 namespace Craftisan\Seo\Http\Controllers;
@@ -242,8 +242,8 @@ SCRIPT;
                 $variables = SeoTemplateHelper::extractVariablesFromString($input);
                 if ($variables instanceof Response || count($variables)) {
                     $error = new MessageBag([
-                        'title' => trans('errors.admin.seo.page_error'),
-                        'message' => trans('errors.admin.seo.variable_not_allowed'),
+                        'title' => trans('seo.admin.page_error'),
+                        'message' => trans('seo.admin.variable_not_allowed'),
                     ]);
 
                     return back()->with(compact('error'))->withInput();
@@ -287,8 +287,8 @@ SCRIPT;
             // Redirect back with errors if any/all variable values are not provided
             if ($error || empty($variableValues)) {
                 $error = new MessageBag([
-                    'title' => trans('errors.admin.seo.page_error'),
-                    'message' => trans('errors.admin.seo.variable_value_empty'),
+                    'title' => trans('seo.admin.page_error'),
+                    'message' => trans('seo.admin.variable_value_empty'),
                 ]);
 
                 return back()->with(compact('error'))->withInput();
@@ -313,8 +313,8 @@ SCRIPT;
 
                 if (count($fieldVariables) > count($variableValues)) {
                     $error = new MessageBag([
-                        'title' => trans('errors.admin.seo.page_error'),
-                        'message' => trans('errors.admin.seo.variable_mismatch'),
+                        'title' => trans('seo.admin.page_error'),
+                        'message' => trans('seo.admin.variable_mismatch'),
                     ]);
 
                     return back()->with(compact('error'))->withInput();
@@ -354,7 +354,7 @@ SCRIPT;
 
                     // If page with the same url exists, don't save the current page, move on to the next
                     if (!$this->formatUrl($page, $form)) {
-                        $urlError[] = trans('errors.admin.seo.url_exists_page', ['url' => $page->full_url]);
+                        $urlError[] = trans('seo.admin.url_exists_page', ['url' => $page->full_url]);
                         continue;
                     }
 
@@ -370,7 +370,7 @@ SCRIPT;
 
             if (!empty($urlError)) {
                 $form->warning = [
-                    'title' => trans('errors.admin.seo.page_warning'),
+                    'title' => trans('seo.admin.page_warning'),
                     'message' => implode('<br>', array_values($urlError)),
                 ];
             }

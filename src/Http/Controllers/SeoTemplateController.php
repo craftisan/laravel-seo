@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2020 Deekshant Joshi
  *
  * @author    Deekshant Joshi (deekshant.joshi@gmail.com)
- * @since     07 February 2020
+ * @since     13 February 2020
  */
 
 namespace Craftisan\Seo\Http\Controllers;
@@ -161,8 +161,8 @@ class SeoTemplateController extends BaseAdminController
 
             if (count($variables) == 0) {
                 $warning = new MessageBag([
-                    'title' => trans('errors.admin.seo.template_error'),
-                    'message' => trans('errors.admin.seo.no_variables_warning'),
+                    'title' => trans('seo.admin.template_error'),
+                    'message' => trans('seo.admin.no_variables_warning'),
                 ]);
 
                 return back()->with(compact('warning'))->withInput();
@@ -176,8 +176,8 @@ class SeoTemplateController extends BaseAdminController
 
             if (count($diff) != 0) {
                 $error = new MessageBag([
-                    'title' => trans('errors.admin.seo.template_error'),
-                    'message' => trans('errors.admin.seo.variable_spellcheck',
+                    'title' => trans('seo.admin.template_error'),
+                    'message' => trans('seo.admin.variable_spellcheck',
                         ['variable' => '{{' . last($diff) . '}}']),
                 ]);
 
@@ -205,8 +205,8 @@ class SeoTemplateController extends BaseAdminController
             $templates = SeoTemplate::where('url', $form->model()->url)->where('id', '!=', $form->model()->id)->get();
             if ($templates->isNotEmpty()) {
                 $warning = new MessageBag([
-                    'title' => trans('errors.admin.seo.template_warning'),
-                    'message' => trans('errors.admin.seo.url_exists_template'),
+                    'title' => trans('seo.admin.template_warning'),
+                    'message' => trans('seo.admin.url_exists_template'),
                 ]);
 
                 // set warning in the redirect
@@ -285,8 +285,8 @@ SCRIPT;
         $response = parent::duplicate($id);
 
         $warning = new MessageBag([
-            'title' => trans('errors.admin.seo.template_warning'),
-            'message' => trans('errors.admin.seo.url_exists_template'),
+            'title' => trans('seo.admin.template_warning'),
+            'message' => trans('seo.admin.url_exists_template'),
         ]);
 
         // set warning in the redirect
