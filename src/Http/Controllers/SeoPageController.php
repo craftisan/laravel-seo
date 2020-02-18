@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2020 Deekshant Joshi
  *
  * @author    Deekshant Joshi (deekshant.joshi@gmail.com)
- * @since     13 February 2020
+ * @since     18 February 2020
  */
 
 namespace Craftisan\Seo\Http\Controllers;
@@ -509,7 +509,9 @@ SCRIPT;
         });
         $grid->column('full_url', 'Url')->display(function ($url) {
             if ($this->status === SeoPageStatus::LIVE) {
-                return "<a href='/$url'>$url</a>";
+                $fullUrl = config('seo.live_url') . $url;
+
+                return "<a href='$fullUrl'>$url</a>";
             }
 
             return $url;
