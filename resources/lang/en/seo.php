@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2020 Deekshant Joshi
  *
  * @author    Deekshant Joshi (deekshant.joshi@gmail.com)
- * @since     13 February 2020
+ * @since     18 February 2020
  */
 
 return [
@@ -12,6 +12,8 @@ return [
      * Error messages related to Admin Panel
      */
     'admin' => [
+        'general_error' => 'Error',
+        'general_warning' => 'Warning',
         'template_error' => 'Error in template',
         'template_warning' => 'Warning in template',
         'page_error' => 'Error creating page',
@@ -24,5 +26,7 @@ return [
         'variable_name_incorrect' => 'Only lowercase characters and _ is allowed. Please type the correct variable names in string- <br>":string".',
         'url_exists_page' => 'A page with the URL \':url\' already exists. Page was not created!',
         'url_exists_template' => 'A template with the same URL already exists. Either change the URL or be careful while generating pages of the same URL',
+        'preview_not_enabled' => 'Page preview is not enabled.',
+        'preview_page_missing' => 'No view defined for page preview.',
     ],
 ];

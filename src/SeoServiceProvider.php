@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2020 Deekshant Joshi
  *
  * @author    Deekshant Joshi (deekshant.joshi@gmail.com)
- * @since     13 February 2020
+ * @since     18 February 2020
  */
 
 namespace Craftisan\Seo;
@@ -37,7 +37,12 @@ class SeoServiceProvider extends ServiceProvider
         // -------- Load required resources --------
         // Load routes
         $this->app->booted(function () {
-            Seo::routes(__DIR__ . '/../routes/web.php');
+            if (config('seo.routes.admin')) {
+                Seo::routes(__DIR__ . '/../routes/admin.php');
+            }
+            if (config('seo.routes.web') && !config('seo.routes.custom_web')) {
+                Seo::routes(__DIR__ . '/../routes/web.php');
+            }
         });
 
         // Load translations

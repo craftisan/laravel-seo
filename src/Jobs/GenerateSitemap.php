@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2020 Deekshant Joshi
  *
  * @author    Deekshant Joshi (deekshant.joshi@gmail.com)
- * @since     07 February 2020
+ * @since     18 February 2020
  */
 
 namespace Craftisan\Seo\Jobs;
@@ -26,6 +26,6 @@ class GenerateSitemap implements ShouldQueue
 
     public function handle()
     {
-        SitemapGenerator::create(config('seo.live_url'))->writeToFile(config('seo.sitemap_path'));
+        SitemapGenerator::create(config('seo.live_url'))->writeToFile(config('seo.routes.sitemap'));
     }
 }

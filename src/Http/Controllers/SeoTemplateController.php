@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2020 Deekshant Joshi
  *
  * @author    Deekshant Joshi (deekshant.joshi@gmail.com)
- * @since     13 February 2020
+ * @since     18 February 2020
  */
 
 namespace Craftisan\Seo\Http\Controllers;
@@ -15,6 +15,7 @@ use Craftisan\Seo\Models\SeoTemplate;
 use Craftisan\Seo\Models\SeoTemplateVariable;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Grid;
+use Encore\Admin\Grid\Displayers\Actions;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Layout\Row;
 use Encore\Admin\Show;
@@ -84,22 +85,11 @@ class SeoTemplateController extends BaseAdminController
         // Set the export class
         $grid->exporter(new SeoTemplateExport());
 
+        $grid->actions(function (Actions $actions) {
+            $actions->disableView();
+        });
+
         return $grid;
-    }
-
-    /**
-     * Show interface.
-     *
-     * @param mixed $id
-     * @param Content $content
-     *
-     * @return Content
-     */
-    public function show($id, Content $content)
-    {
-        $page = SeoTemplate::find($id);
-
-        return view('seo.index', compact('page'));
     }
 
     /**

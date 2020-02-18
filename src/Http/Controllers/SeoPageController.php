@@ -49,7 +49,32 @@ class SeoPageController extends BaseAdminController
      */
     public function show($id, Content $content)
     {
-        $page = SeoPage::find($id);
+        // Check if page preview is enabled in config, redirect to admin otherwise
+        if (!config('seo.preview.enabled', false)) {
+            $warning = new MessageBag([
+                'title' => trans('seo.admin.general_warning'),
+                'message' => trans('seo.admin.preview_not_enabled'),
+            ]);
+
+            return redirect()->route('seo.pages.index')->with(compact('warning'));
+        }
+
+        // Check if a view is defined for page preview
+        $view = config('seo.preview.page');
+        if (empty($view)) {
+            $warning = new MessageBag([
+                'title' => trans('seo.admin.general_warning'),
+                'message' => trans('seo.admin.preview_page_missing'),
+            ]);
+
+            return redirect()->route('seo.pages.index')->with(compact('warning'));
+        }
+
+        // Check if the requested page exists, redirect to admin otherwise
+        $page = SeoPage::with('users')->where('id', $id)->first();
+        if (empty($page)) {
+            return redirect()->route('seo.pages.index');
+        }
 
         // To keep the page layout consistent
         if ($page->users->count() < 12) {
@@ -72,7 +97,7 @@ class SeoPageController extends BaseAdminController
             );
         }
 
-        return view('seo.index', compact('page', 'links'));
+        return view($view, compact('page', 'links'));
     }
 
     /**
@@ -176,9 +201,11 @@ class SeoPageController extends BaseAdminController
             $this->processCreateForm($form, $template);
         }
 
-        $form->saved(function (Form $form) {
-            dispatch(new GenerateSitemap());
-        });
+        if (!config('seo.routes.sitemap')) {
+            $form->saved(function (Form $form) {
+                dispatch(new GenerateSitemap());
+            });
+        }
 
         return $form;
     }
