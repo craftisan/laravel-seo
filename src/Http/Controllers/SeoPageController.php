@@ -201,7 +201,7 @@ class SeoPageController extends BaseAdminController
             $this->processCreateForm($form, $template);
         }
 
-        if (!config('seo.routes.sitemap')) {
+        if (config('seo.routes.sitemap')) {
             $form->saved(function (Form $form) {
                 dispatch(new GenerateSitemap());
             });
