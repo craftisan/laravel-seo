@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2020 Deekshant Joshi
  *
  * @author    Deekshant Joshi (deekshant.joshi@gmail.com)
- * @since     18 February 2020
+ * @since     7 February 2020
  */
 
 namespace Craftisan\Seo\Http\Controllers;
@@ -169,8 +169,6 @@ class SeoPageController extends BaseAdminController
             ->help('Optimal Length: 50-60 characters. Max: 100 characters.')
             ->value($template ? $template->meta_title : null);
         $form->textarea('meta_description', 'Meta description')
-            ->placeholder('Max 320 characters')
-            ->rules('max:320')
             ->help('Optimal Length: 150-160 characters. Max: 320 characters.')
             ->value($template ? $template->meta_description : null);
         $form->textarea('h1', 'H1')->value($template ? $template->h1 : null);
@@ -277,8 +275,8 @@ SCRIPT;
                 }
             }
             // Format url properly
-            $form->input('url', str_replace([' ', '_', '/', '\\'], '-', strtolower($form->model()->url)));
-            $form->input('parent_url', str_replace([' ', '_', '\\'], '-', strtolower($form->model()->parent_url)));
+            $form->input('url', str_replace([' ', '_', '/', '\\', ','], '-', strtolower($form->model()->url)));
+            $form->input('parent_url', str_replace([' ', '_', '\\', ','], '-', strtolower($form->model()->parent_url)));
 
             return $form;
         });
@@ -488,8 +486,8 @@ SCRIPT;
     private function formatUrl($page, Form $form)
     {
         // Format url properly
-        $page->url = str_replace([' ', '_', '/', '\\'], '-', strtolower($page->url));
-        $page->parent_url = str_replace([' ', '_', '\\'], '-', strtolower($page->parent_url));
+        $page->url = str_replace([' ', '_', '/', '\\', ','], '-', strtolower($page->url));
+        $page->parent_url = str_replace([' ', '_', '\\', ','], '-', strtolower($page->parent_url));
 
         // Check if a page of the same url exists
         $oldPages = SeoPage::where('url', $page->url)->where('parent_url', $page->parent_url);

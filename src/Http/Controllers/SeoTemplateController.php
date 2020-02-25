@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2020 Deekshant Joshi
  *
  * @author    Deekshant Joshi (deekshant.joshi@gmail.com)
- * @since     18 February 2020
+ * @since     7 February 2020
  */
 
 namespace Craftisan\Seo\Http\Controllers;
@@ -127,8 +127,6 @@ class SeoTemplateController extends BaseAdminController
             ->rules('max:100')
             ->help('Optimal Length: 50-60 characters. Max: 100 characters.');
         $form->textarea('meta_description', 'Meta description')
-            ->placeholder('Max 320 characters')
-            ->rules('max:320')
             ->help('Optimal Length: 150-160 characters. Max: 320 characters.');
         $form->textarea('h1', 'H1');
         $form->textarea('h2', 'H2');
