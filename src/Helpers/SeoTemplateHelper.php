@@ -76,8 +76,8 @@ class SeoTemplateHelper
                 $charCheck = str_replace('_', '', $match2);
                 if (!ctype_alnum($charCheck) && !ctype_lower(preg_replace('/[0-9]+/', '', $charCheck))) {
                     $error = new MessageBag([
-                        'title' => trans('seo.admin.template_error'),
-                        'message' => trans('seo.admin.variable_name_incorrect', ['string' => $string[0]]),
+                        'title' => trans('seo::errors.template_error'),
+                        'message' => trans('seo::errors.variable_name_incorrect', ['string' => $string[0]]),
                     ]);
 
                     return back()->with(compact('error'))->withInput();

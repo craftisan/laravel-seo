@@ -72,7 +72,7 @@ class Form extends LaravelAdminForm
             return $response;
         }
 
-        if ($response = $this->ajaxResponse(trans('seo.admin.save_succeeded'))) {
+        if ($response = $this->ajaxResponse(trans('admin.save_succeeded'))) {
             return $response;
         }
 

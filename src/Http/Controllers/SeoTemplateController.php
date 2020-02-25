@@ -149,8 +149,8 @@ class SeoTemplateController extends BaseAdminController
 
             if (count($variables) == 0) {
                 $warning = new MessageBag([
-                    'title' => trans('seo.admin.template_error'),
-                    'message' => trans('seo.admin.no_variables_warning'),
+                    'title' => trans('seo::errors.template_error'),
+                    'message' => trans('seo::errors.no_variables_warning'),
                 ]);
 
                 return back()->with(compact('warning'))->withInput();
@@ -164,8 +164,8 @@ class SeoTemplateController extends BaseAdminController
 
             if (count($diff) != 0) {
                 $error = new MessageBag([
-                    'title' => trans('seo.admin.template_error'),
-                    'message' => trans('seo.admin.variable_spellcheck',
+                    'title' => trans('seo::errors.template_error'),
+                    'message' => trans('seo::errors.variable_spellcheck',
                         ['variable' => '{{' . last($diff) . '}}']),
                 ]);
 
@@ -193,8 +193,8 @@ class SeoTemplateController extends BaseAdminController
             $templates = SeoTemplate::where('url', $form->model()->url)->where('id', '!=', $form->model()->id)->get();
             if ($templates->isNotEmpty()) {
                 $warning = new MessageBag([
-                    'title' => trans('seo.admin.template_warning'),
-                    'message' => trans('seo.admin.url_exists_template'),
+                    'title' => trans('seo::errors.template_warning'),
+                    'message' => trans('seo::errors.url_exists_template'),
                 ]);
 
                 // set warning in the redirect
@@ -273,8 +273,8 @@ SCRIPT;
         $response = parent::duplicate($id);
 
         $warning = new MessageBag([
-            'title' => trans('seo.admin.template_warning'),
-            'message' => trans('seo.admin.url_exists_template'),
+            'title' => trans('seo::errors.template_warning'),
+            'message' => trans('seo::errors.url_exists_template'),
         ]);
 
         // set warning in the redirect

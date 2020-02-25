@@ -46,7 +46,7 @@ class SeoServiceProvider extends ServiceProvider
         });
 
         // Load translations
-        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang/en/seo.php', 'seo');
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'seo');
 
         // Load views
         if ($views = $extension->views()) {

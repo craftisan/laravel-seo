@@ -52,8 +52,8 @@ class SeoPageController extends BaseAdminController
         // Check if page preview is enabled in config, redirect to admin otherwise
         if (!config('seo.preview.enabled', false)) {
             $warning = new MessageBag([
-                'title' => trans('seo.admin.general_warning'),
-                'message' => trans('seo.admin.preview_not_enabled'),
+                'title' => trans('seo::errors.general_warning'),
+                'message' => trans('seo::errors.preview_not_enabled'),
             ]);
 
             return redirect()->route('seo.pages.index')->with(compact('warning'));
@@ -63,8 +63,8 @@ class SeoPageController extends BaseAdminController
         $view = config('seo.preview.page');
         if (empty($view)) {
             $warning = new MessageBag([
-                'title' => trans('seo.admin.general_warning'),
-                'message' => trans('seo.admin.preview_page_missing'),
+                'title' => trans('seo::errors.general_warning'),
+                'message' => trans('seo::errors.preview_page_missing'),
             ]);
 
             return redirect()->route('seo.pages.index')->with(compact('warning'));
@@ -267,8 +267,8 @@ SCRIPT;
                 $variables = SeoTemplateHelper::extractVariablesFromString($input);
                 if ($variables instanceof Response || count($variables)) {
                     $error = new MessageBag([
-                        'title' => trans('seo.admin.page_error'),
-                        'message' => trans('seo.admin.variable_not_allowed'),
+                        'title' => trans('seo::errors.page_error'),
+                        'message' => trans('seo::errors.variable_not_allowed'),
                     ]);
 
                     return back()->with(compact('error'))->withInput();
@@ -312,8 +312,8 @@ SCRIPT;
             // Redirect back with errors if any/all variable values are not provided
             if ($error || empty($variableValues)) {
                 $error = new MessageBag([
-                    'title' => trans('seo.admin.page_error'),
-                    'message' => trans('seo.admin.variable_value_empty'),
+                    'title' => trans('seo::errors.page_error'),
+                    'message' => trans('seo::errors.variable_value_empty'),
                 ]);
 
                 return back()->with(compact('error'))->withInput();
@@ -338,8 +338,8 @@ SCRIPT;
 
                 if (count($fieldVariables) > count($variableValues)) {
                     $error = new MessageBag([
-                        'title' => trans('seo.admin.page_error'),
-                        'message' => trans('seo.admin.variable_mismatch'),
+                        'title' => trans('seo::errors.page_error'),
+                        'message' => trans('seo::errors.variable_mismatch'),
                     ]);
 
                     return back()->with(compact('error'))->withInput();
@@ -379,7 +379,7 @@ SCRIPT;
 
                     // If page with the same url exists, don't save the current page, move on to the next
                     if (!$this->formatUrl($page, $form)) {
-                        $urlError[] = trans('seo.admin.url_exists_page', ['url' => $page->full_url]);
+                        $urlError[] = trans('seo::errors.url_exists_page', ['url' => $page->full_url]);
                         continue;
                     }
 
@@ -395,7 +395,7 @@ SCRIPT;
 
             if (!empty($urlError)) {
                 $form->warning = [
-                    'title' => trans('seo.admin.page_warning'),
+                    'title' => trans('seo::errors.page_warning'),
                     'message' => implode('<br>', array_values($urlError)),
                 ];
             }
