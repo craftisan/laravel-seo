@@ -36,6 +36,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Craftisan\Seo\Models\SeoTemplate $template
  * @property \Illuminate\Database\Eloquent\Collection $users
  * @property \Encore\Admin\Auth\Database\Administrator $author
+ * @property \Craftisan\Seo\Models\SeoPageVariable $variables
  *
  * @package Craftisan\Seo\Models
  */
@@ -106,9 +107,18 @@ class SeoPage extends Eloquent
      *
      * @param $value
      */
-    public function setUserQueryParamsAttribute($value)
+    public function setVariableValuesAttribute($value)
     {
-        $this->attributes['user_query_params'] = $value;
+        $this->attributes['variable_values'] = $value;
+    }
+
+    public function __clone()
+    {
+        // Force a copy of this->variable_values, otherwise
+        // it will point to same object.
+        if ($this->variable_values != null) {
+            $this->variable_values = clone $this->variable_values;
+        }
     }
 
     /**
@@ -120,27 +130,26 @@ class SeoPage extends Eloquent
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function users()
     {
-        $config = [
-            'user_model' => config('seo.database.users_model', config('admin.database.users_model')),
-            'user_primary_key' => config('seo.database.users_primary_key', 'id'),
-        ];
-
-        return $this->belongsToMany(
-            $config['user_model'],
-            'seo_page_users',
-            'seo_page_id',
-            'user_id',
-            'id',
-            $config['user_primary_key']
-        )->withPivot('user_pic_url');
+        return $this->hasMany(config('seo.database.users_model', config('admin.database.users_model')), 'seo_page_id', 'id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function author()
     {
         return $this->belongsTo(Administrator::class, 'author_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function variables()
+    {
+        return $this->hasOne(SeoPageVariable::class, 'page_id', 'id');
     }
 }

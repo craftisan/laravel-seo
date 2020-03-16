@@ -26,7 +26,6 @@ return [
 
     'database' => [
         'users_model' => Administrator::class,
-        'users_primary_key' => 'id',
     ],
 
     'lookup' => [

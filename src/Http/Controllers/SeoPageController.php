@@ -15,6 +15,7 @@ use Craftisan\Seo\Extensions\Form;
 use Craftisan\Seo\Helpers\SeoTemplateHelper;
 use Craftisan\Seo\Jobs\GenerateSitemap;
 use Craftisan\Seo\Models\SeoPage;
+use Craftisan\Seo\Models\SeoPageVariable;
 use Craftisan\Seo\Models\SeoTemplate;
 use Craftisan\Seo\Models\SeoTemplateVariable;
 use Encore\Admin\Facades\Admin;
@@ -371,11 +372,10 @@ SCRIPT;
                     }
                 }
 
-                $pageUsers = [];
                 foreach ($pages as $key => $page) {
 
-                    $users = $page->user_query_params;
-                    unset($page->user_query_params); // Detach the temp seoUsers object
+                    $pageVariableValues = $page->variable_values;
+                    unset($page->variable_values); // Detach the temp seoUsers object
 
                     // If page with the same url exists, don't save the current page, move on to the next
                     if (!$this->formatUrl($page, $form)) {
@@ -385,10 +385,8 @@ SCRIPT;
 
                     // Save the page
                     $page->save();
-
-                    $pageUsers[$page->id] = $users;
+                    $page->variables()->save($pageVariableValues);
                 }
-                // TODO: Note: User attachement was removed
             }
 
             $form->model()->deleted_at = Carbon::now()->toDateTimeString();
@@ -449,29 +447,24 @@ SCRIPT;
     private function setAttributes($page, $variable, $value)
     {
         foreach ($page->getFillable() as $attribute) {
-            $page->$attribute = str_replace('{{' . $variable . '}}', $value, $page->$attribute);;
+            $page->$attribute = str_replace('{{' . $variable . '}}', $value, $page->$attribute);
         }
     }
 
     /**
      * Attach a collection to the SeoPage model object which contains the params required to query users to associate with the page
      *
-     * @param $page
+     * @param \Craftisan\Seo\Models\SeoPage $page
      * @param $variable
      * @param $value
      */
     private function attachUserQueryParams($page, $variable, $value)
     {
-        if ($page->user_query_params == null) {
-            $page->user_query_params = collect()->push([
-                'variable' => $variable,
-                'value' => $value,
-            ]);
+        if (!isset($page->variable_values)) {
+            $variableValues = new SeoPageVariable();
+            $variableValues->variables = [$variable => $value];
         } else {
-            $page->user_query_params->push([
-                'variable' => $variable,
-                'value' => $value,
-            ]);
+            $page->variable_values->variables = array_merge($page->variable_values->variables, [$variable => $value]);
         }
     }
 
