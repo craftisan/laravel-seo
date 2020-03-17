@@ -461,8 +461,8 @@ SCRIPT;
     private function attachUserQueryParams($page, $variable, $value)
     {
         if (!isset($page->variable_values)) {
-            $variableValues = new SeoPageVariable();
-            $variableValues->variables = [$variable => $value];
+            $page->variable_values = new SeoPageVariable();
+            $page->variable_values->variables = [$variable => $value];
         } else {
             $page->variable_values->variables = array_merge($page->variable_values->variables, [$variable => $value]);
         }
