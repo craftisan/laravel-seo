@@ -8,6 +8,8 @@
 
 namespace Craftisan\Seo\Http\Controllers;
 
+use App\Models\City;
+use App\Models\State;
 use Craftisan\Seo\Extensions\Form;
 use Craftisan\Seo\Models\SeoTemplateVariable;
 use Encore\Admin\Grid;
@@ -49,6 +51,11 @@ class SeoTemplateVariableController extends BaseAdminController
         $grid->name('Name');
         $grid->column('is_url', 'Is Url')->switch()->help('Indicates whether the variable can used as a path string in url');
         $grid->column('url');
+        $grid->column('dependent_variable')->display(function ($variableId) {
+            if (!empty($variableId)) {
+                return SeoTemplateVariable::find($variableId)->name;
+            }
+        });
         $grid->data_model('Data model');
         $grid->user_relation('Relation with User');
         $grid->user_relation_column('Relational Column');
@@ -90,6 +97,7 @@ class SeoTemplateVariableController extends BaseAdminController
         $show->user_relation_column('Relational Column');
         $show->parent_id();
         $show->is_url();
+        $show->dependent_variable();
         $show->created_at('Created at');
         $show->created_at('Created at');
         $show->updated_at('Updated at');
@@ -137,6 +145,10 @@ class SeoTemplateVariableController extends BaseAdminController
             ->help('Indicates whether the variable can used as a path string in url')
             ->value(true);
 
+        $form->select('dependent_variable', 'Dependent variable')
+            ->options(SeoTemplateVariable::pluck('name', 'id')->all())
+            ->help('A dependent variable will have values depending on the selected value of this variable. For instance, state-city relationship.');
+
         $form->divider('NOTE: Do not edit following fields if you are NOT SURE what they do');
         $form->text('data_model', 'Data model')->required()
             ->help('Indicates the model from where to fetch the data for the variable $name.');
@@ -146,6 +158,12 @@ class SeoTemplateVariableController extends BaseAdminController
 
         $form->text('user_relation_column', 'Relational Column')
             ->help('Indicates the column in the $user_relation table where data for the {variable} is stored.');
+
+        $form->submitted(function (Form $form) {
+            if ($form->input('parent_id') === null) {
+                $form->input('parent_id', 0);
+            }
+        });
 
         return $form;
     }
@@ -164,5 +182,4 @@ class SeoTemplateVariableController extends BaseAdminController
             ->description('description')
             ->body($this->form());
     }
-
 }

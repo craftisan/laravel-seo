@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $data_model           Indicates the model from where to fetch the data for the variable $name.
  * @property string $user_relation        Indicates the relation from User model with the model where data for the {variable} is stored.
  * @property string $user_relation_column Indicates the column in the $user_relation table where data for the {variable} is stored.
+ * @property string $dependent_variable   A dependent variable will have values depending on the selected value of this variable. For instance, state-city relationship.
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property string $deleted_at
@@ -43,6 +44,7 @@ class SeoTemplateVariable extends Eloquent
         'data_model',
         'user_relation',
         'user_relation_column',
+        'dependent_variable',
     ];
 
     protected $appends = [

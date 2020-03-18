@@ -149,7 +149,17 @@ class SeoPageController extends BaseAdminController
             if (!empty($template)) {
                 foreach ($template->variables as $variable) {
                     $data = $variable->getData();
-                    $form->multipleSelect($variable->name, $variable->name)->options($data)->required();
+
+                    // If the variable has other dependent variable then show it as single select and load the dependent variable's values via api
+                    if (!empty($variable->dependent_variable) && !empty($dependent = $template->variables->where('id',
+                            $variable->dependent_variable)->first())) {
+                        $form->select($variable->name, $variable->name)
+                            ->options($data)
+                            ->required()
+                            ->load($dependent->name, '/admin/seo/api/' . $dependent->name);
+                    } else {
+                        $form->multipleSelect($variable->name, $variable->name)->options($data)->required();
+                    }
                 }
             }
         }
@@ -415,7 +425,7 @@ SCRIPT;
     private function createPages($variableValues, $variable, Model $pageTemplate, array $previousCollection = [])
     {
         $pages = [];
-        $values = array_filter($variableValues[$variable]);
+        $values = array_filter(is_array($variableValues[$variable]) ? $variableValues[$variable] : [$variableValues[$variable]]);
         foreach ($values as $value) {
             if ($previousCollection == null) {
                 $replica = clone $pageTemplate;
