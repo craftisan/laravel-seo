@@ -27,11 +27,15 @@ class WebController extends Controller
         $parentUrl = substr($string, 0, strrpos($string, '/') + 1);
 
         // Check if there exists a page with such a url
-        $page = SeoPage::where(['url' => $url, 'parent_url' => $parentUrl, 'status' => SeoPageStatus::LIVE])->first();
+        $page = SeoPage::with()->where(['url' => $url, 'parent_url' => $parentUrl, 'status' => SeoPageStatus::LIVE])->first();
 
         // Redirect to home if it doesn't
         if (empty($page)) {
             return redirect('/');
+        }
+
+        if (!empty($page->redirect_url)) {
+            redirect($page->redirect_url, 301);
         }
 
         $links = SeoPage::where([

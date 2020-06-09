@@ -48,6 +48,12 @@ class SeoPageController extends BaseAdminController
      *
      * @return Content
      */
+    /**
+     * @param mixed $id
+     * @param \Encore\Admin\Layout\Content $content
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function show($id, Content $content)
     {
         // Check if page preview is enabled in config, redirect to admin otherwise
@@ -174,6 +180,9 @@ class SeoPageController extends BaseAdminController
             $form->text('parent_url');
         }
 
+        $form->text('redirect_url', 'Redirect Url')->rules('required')->required()
+            ->help('This wil be a permanent redirect (HTTP 301), <a href="https://moz.com/blog/301-redirection-rules-for-seo">recommended for seo</a>');
+
         $form->text('meta_title', 'Meta title')
             ->placeholder('Max 100 characters')
             ->rules('max:100')
@@ -288,6 +297,7 @@ SCRIPT;
             // Format url properly
             $form->input('url', str_replace([' ', '_', '/', '\\', ','], '-', strtolower($form->model()->url)));
             $form->input('parent_url', str_replace([' ', '_', '\\', ','], '-', strtolower($form->model()->parent_url)));
+            $form->input('redirect_url', str_replace([' ', '_', '\\', ','], '-', strtolower($form->model()->redirect_url)));
 
             return $form;
         });
@@ -491,6 +501,7 @@ SCRIPT;
         // Format url properly
         $page->url = str_replace([' ', '_', '/', '\\', ','], '-', strtolower($page->url));
         $page->parent_url = str_replace([' ', '_', '\\', ','], '-', strtolower($page->parent_url));
+        $page->redirect_url = str_replace([' ', '_', '\\', ','], '-', strtolower($page->redirect_url));
 
         // Check if a page of the same url exists
         $oldPages = SeoPage::where('url', $page->url)->where('parent_url', $page->parent_url);

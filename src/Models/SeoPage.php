@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $p2
  * @property string $url
  * @property string $parent_url
+ * @property string $redirect_url
  * @property string $full_url Appended Attribute
  * @property array $keywords
  * @property int $author_id
@@ -72,6 +73,7 @@ class SeoPage extends Eloquent
         'p2',
         'url',
         'parent_url',
+        'redirect_url',
         'keywords',
         'template_id',
         'status',
