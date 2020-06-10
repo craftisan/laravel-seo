@@ -131,8 +131,8 @@ class SeoTemplateController extends BaseAdminController
         $form->textarea('h1', 'H1');
         $form->textarea('h2', 'H2');
         $form->textarea('h3', 'H3');
-        $form->textarea('p1', 'P1');
-        $form->textarea('p2', 'P2');
+        $form->ckeditor('p1', 'P1');
+        $form->ckeditor('p2', 'P2');
         $form->tags('keywords', 'Keywords');
 
         // Set the author Id

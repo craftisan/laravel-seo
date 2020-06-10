@@ -8,6 +8,8 @@
 
 namespace Craftisan\Seo;
 
+use Craftisan\Seo\Extensions\CKEditor;
+use Craftisan\Seo\Extensions\Form;
 use Encore\Admin\Extension;
 
 /**
@@ -20,8 +22,9 @@ class Seo extends Extension
     public $name = 'seo';
 
     public $views = __DIR__ . '/../resources/views';
+
 //
-//    public $assets = __DIR__ . '/../resources/assets';
+    public $assets = __DIR__ . '/../public';
 
     // TODO: menu & permissions
 //    public $menu = [
@@ -29,4 +32,12 @@ class Seo extends Extension
 //        'path' => 'seo',
 //        'icon' => 'fa-gears',
 //    ];
+
+    public static function boot()
+    {
+        // Load extensions
+        Form::extend('ckeditor', CKEditor::class);
+
+        return parent::boot();
+    }
 }

@@ -30,6 +30,7 @@ class SeoServiceProvider extends ServiceProvider
      */
     public function boot(Seo $extension)
     {
+        // Boot the extension
         if (!Seo::boot()) {
             return;
         }
@@ -60,12 +61,9 @@ class SeoServiceProvider extends ServiceProvider
         // Publish for Admin
         $this->publishes([__DIR__ . '/../resources/lang' => resource_path('lang')], 'seo-admin');
 
-        // Publish for web
+        // Publish Admin assets
         if ($this->app->runningInConsole() && $assets = $extension->assets()) {
-            $this->publishes(
-                [$assets => public_path('vendor/craftisan/seo')],
-                'seo-web'
-            );
+            $this->publishes([$assets => public_path('vendor/laravel-seo')], 'seo-admin-assets');
         }
     }
 }

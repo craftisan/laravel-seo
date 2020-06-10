@@ -194,8 +194,8 @@ class SeoPageController extends BaseAdminController
         $form->textarea('h1', 'H1')->value($template ? $template->h1 : null);
         $form->textarea('h2', 'H2')->value($template ? $template->h2 : null);
         $form->textarea('h3', 'H3')->value($template ? $template->h3 : null);
-        $form->textarea('p1', 'P1')->value($template ? $template->p1 : null);
-        $form->textarea('p2', 'P2')->value($template ? $template->p2 : null);
+        $form->ckeditor('p1', 'P1')->value($template ? $template->p1 : null);
+        $form->ckeditor('p2', 'P2')->value($template ? $template->p2 : null);
         $form->tags('keywords', 'Keywords')->value($template ? $template->keywords : null);
         $form->switch('status', 'Status')->states([
             'off' => ['value' => SeoPageStatus::DRAFT, 'text' => SeoPageStatus::DRAFT, 'color' => 'primary'],

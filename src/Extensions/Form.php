@@ -20,6 +20,8 @@ use function request;
  * Class Form
  * Provides additional methods and modifies the behavior of @see \Encore\Admin\Form
  *
+ * @method CKEditor ckeditor($column, $label = '')
+ *
  * @package Craftisan\Seo\Extensions
  */
 class Form extends LaravelAdminForm
