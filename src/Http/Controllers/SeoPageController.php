@@ -275,7 +275,7 @@ SCRIPT;
     private function processEditForm(Form $form)
     {
         $form->saving(function (Form $form) {
-            foreach (app(SeoTemplate::class)->getFillable() as $attribute) {
+            foreach (app(SeoPage::class)->getFillable() as $attribute) {
 
                 // Original input value (with variables)
                 $input = $form->input($attribute);
@@ -295,9 +295,9 @@ SCRIPT;
                 }
             }
             // Format url properly
-            $form->input('url', str_replace([' ', '_', '/', '\\', ','], '-', strtolower($form->model()->url)));
-            $form->input('parent_url', str_replace([' ', '_', '\\', ','], '-', strtolower($form->model()->parent_url)));
-            $form->input('redirect_url', str_replace([' ', '_', '\\', ','], '-', strtolower($form->model()->redirect_url)));
+            $form->input('url', str_replace([' ', '_', '/', '\\', ','], '-', strtolower($form->input('url'))));
+            $form->input('parent_url', str_replace([' ', '_', '\\', ','], '-', strtolower($form->input('parent_url'))));
+            $form->input('redirect_url', str_replace([' ', '_', '\\', ','], '-', strtolower($form->input('redirect_url'))));
 
             return $form;
         });
@@ -341,7 +341,7 @@ SCRIPT;
             }
 
             $pageTemplate = new SeoPage();
-            foreach (app(SeoTemplate::class)->getFillable() as $attribute) {
+            foreach (app(SeoPage::class)->getFillable() as $attribute) {
 
                 // Original input value (with variables)
                 $input = $form->input($attribute);
