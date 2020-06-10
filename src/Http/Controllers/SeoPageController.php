@@ -180,7 +180,7 @@ class SeoPageController extends BaseAdminController
             $form->text('parent_url');
         }
 
-        $form->text('redirect_url', 'Redirect Url')->rules('required')->required()
+        $form->text('redirect_url', 'Redirect Url')
             ->help('This wil be a permanent redirect (HTTP 301), <a href="https://moz.com/blog/301-redirection-rules-for-seo">recommended for seo</a>');
 
         $form->text('meta_title', 'Meta title')
