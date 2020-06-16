@@ -32,6 +32,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon $updated_at
  * @property string $deleted_at
  * @property \Illuminate\Database\Eloquent\Collection $variables
+ * @property \Illuminate\Database\Eloquent\Collection|\Craftisan\Seo\Models\SeoPage[] $pages
  * @property \Encore\Admin\Auth\Database\Administrator $author
  *
  * @package Craftisan\Seo\Models
@@ -100,5 +101,13 @@ class SeoTemplate extends Eloquent
     public function author()
     {
         return $this->belongsTo(Administrator::class, 'author_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function pages()
+    {
+        return $this->hasMany(SeoPage::class, 'template_id', 'id');
     }
 }

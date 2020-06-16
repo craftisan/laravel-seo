@@ -541,55 +541,75 @@ SCRIPT;
     {
         $grid = new Grid(new SeoPage);
 
-        $grid->column('id');
-        $grid->column('name', 'Name');
+        $templates = SeoTemplate::get()->pluck('name', 'name')->all();
+
+        $grid->column('id')->sortable();
+        $grid->column('name', 'Name')->sortable()->filter('like');
         $grid->column('meta_title', 'Meta title')->display(function ($title) {
             return Str::limit($title, 20, '...');
         });
         $grid->column('full_url', 'Url')->display(function ($url) {
-            if ($this->status === SeoPageStatus::LIVE) {
-                $fullUrl = config('seo.live_url') . $url;
 
-                return "<a href='$fullUrl'>$url</a>";
+            $liveUrl = config('seo.live_url');
+
+            $redirectUrl = '';
+            if (!empty($this->redirect_url)) {
+                $fullUrl = $liveUrl . $this->redirect_url;
+                $redirectUrl = "<br><strong class='text-danger'>Redirects to -</strong><br><a href='$fullUrl' class='text-danger'>$this->redirect_url</a>";
             }
 
-            return $url;
+            if ($this->status === SeoPageStatus::LIVE) {
+                $fullUrl = $liveUrl . $url;
+
+                $displayUrl = "<a href='$fullUrl'>$url</a>";
+            } else {
+                $displayUrl = $url;
+            }
+
+            return $displayUrl . $redirectUrl;
+
         });
         $grid->column('status', 'Status')->switch([
             'on' => ['value' => SeoPageStatus::LIVE, 'text' => SeoPageStatus::LIVE, 'color' => 'success'],
             'off' => ['value' => SeoPageStatus::DRAFT, 'text' => SeoPageStatus::DRAFT, 'color' => 'default'],
-        ]);
-        $grid->column('keywords')->display(function ($keywords) {
-            $keywordsFormat = [];
-            foreach ($keywords as $keyword) {
-                $keywordsFormat[] = "<span class='label label-success'>$keyword</span>";
-            }
+        ])->sortable()->filter(SeoPageStatus::toSelectArray());
 
-            return implode(' ', $keywordsFormat);
-        });
-        $grid->column('template', 'Template')->display(function ($template) {
-            if ($template != null) {
-                $id = $template['id'];
-                $name = $template['name'];
+        $grid->column('keywords')
+            ->display(function ($keywords) {
+                $keywordsFormat = [];
+                foreach ($keywords as $keyword) {
+                    $keywordsFormat[] = "<span class='label label-success'>$keyword</span>";
+                }
 
-                return "<a href='templates/$id/edit'>$name</a>";
-            }
-        });
+                return implode(' ', $keywordsFormat);
+            });
+        $grid->column('template', 'Template')
+            ->display(function ($template) {
+                if ($template != null) {
+                    $id = $template['id'];
+                    $name = $template['name'];
+
+                    return "<a href='/admin/seo/templates?name=$name'>$name</a>";
+                }
+
+                return "";
+            })
+            ->sortable();
+
         $grid->column('author.name', 'Author');
-        $grid->column('created_at');
-        $grid->column('updated_at');
+        $grid->column('created_at')->sortable()->filter('datetime');
+        $grid->column('updated_at')->sortable()->filter('datetime');
 
         // Set the export class
         $grid->exporter(new SeoPageExport());
 
         // Template name filter
-        $grid->filter(function (Grid\Filter $filter) {
-            $filter->where(function ($query) {
-                $query->whereHas('template', function ($query) {
-                    $query->where('name', 'like', "%{$this->input}%");
-                });
-            }, 'Template Name');
+        $grid->filter(function (Grid\Filter $filter) use ($templates) {
+            $filter->disableIdFilter();
+            $filter->in('template.name', 'Template Name')->multipleSelect($templates);
         });
+
+        $grid->model()->orderBy('created_at', 'desc');
 
         return $grid;
     }

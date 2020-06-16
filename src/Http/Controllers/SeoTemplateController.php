@@ -8,9 +8,11 @@
 
 namespace Craftisan\Seo\Http\Controllers;
 
+use Craftisan\Seo\Dictionary\SeoPageStatus;
 use Craftisan\Seo\Extensions\Export\SeoTemplateExport;
 use Craftisan\Seo\Extensions\Form;
 use Craftisan\Seo\Helpers\SeoTemplateHelper;
+use Craftisan\Seo\Models\SeoPage;
 use Craftisan\Seo\Models\SeoTemplate;
 use Craftisan\Seo\Models\SeoTemplateVariable;
 use Encore\Admin\Facades\Admin;
@@ -55,11 +57,11 @@ class SeoTemplateController extends BaseAdminController
     {
         $grid = new Grid(new SeoTemplate);
 
-        $grid->column('id');
+        $grid->column('id')->sortable();
 
         $grid->column('name', 'Name')->display(function ($name) {
             return "<a href='pages/create?template_id=$this->id'>$name</a>";
-        });
+        })->sortable()->filter('like');
 
         $grid->column('meta_title', 'Meta title')->display(function ($text) {
             return Str::limit($text, 20, '...');
@@ -76,9 +78,43 @@ class SeoTemplateController extends BaseAdminController
             return implode(' ', $keywordsFormat);
         });
 
+        $grid->column('pages', 'Pages')
+            ->display(function ($pages) {
+                return count($pages);
+            })
+            ->modal('Pages from template', function (SeoTemplate $seoTemplate) {
+                $pages = $seoTemplate->pages->take(10)->sortByDesc('created_at');
+                $headers = ['Id', 'Name', 'Meta Title', 'Url', 'Status', 'Author', 'Created At'];
+
+                $liveUrl = config('seo.live_url');
+
+                $rows = [];
+                foreach ($pages as $page) {
+
+                    $url = self::renderUrl($page);
+                    $status = self::renderStatus($page);
+                    $rows[] = array_combine($headers, [
+                        $page->id,
+                        $page->name,
+                        $page->meta_title,
+                        $url,
+                        $status,
+                        $page->author->name,
+                        $page->created_at,
+                    ]);
+                }
+
+                $url = '/' . config('admin.route.prefix') . '/seo/pages?template[name][]=' . urlencode($seoTemplate->name) . '&_sort[column]=created_at&_sort[type]=desc';
+
+                return (new Box('', new Table($headers, $rows)))
+                    ->footer("<a class='pull-right' href='$url' target='_blank'>See All {$seoTemplate->pages->count()} Pages <i class='fa fa-external-link'></i></a>")
+                    ->style('info')
+                    ->render();
+            });
+
         $grid->column('author.name', 'Author');
-        $grid->column('created_at');
-        $grid->column('updated_at');
+        $grid->column('created_at')->sortable()->filter('datetime');
+        $grid->column('updated_at')->sortable()->filter('datetime');
 
         $this->createDuplicateButton($grid);
 
@@ -88,6 +124,8 @@ class SeoTemplateController extends BaseAdminController
         $grid->actions(function (Actions $actions) {
             $actions->disableView();
         });
+
+        $grid->model()->orderBy('created_at', 'desc');
 
         return $grid;
     }
@@ -307,5 +345,36 @@ SCRIPT;
         $show->keywords('Keywords');
 
         return $show;
+    }
+
+    private static function renderUrl(SeoPage $page)
+    {
+        $liveUrl = config('seo.live_url');
+
+        $redirectUrl = '';
+        if (!empty($page->redirect_url)) {
+            $fullUrl = $liveUrl . $page->redirect_url;
+            $redirectUrl = "<br><strong class='text-danger'>Redirects to -</strong><br><a href='$fullUrl' class='text-danger'>$page->redirect_url</a>";
+        }
+
+        if ($page->status === SeoPageStatus::LIVE) {
+            $fullUrl = $liveUrl . $page->full_url;
+
+            $displayUrl = "<a href='$fullUrl'>$page->full_url</a>";
+        } else {
+            $displayUrl = $page->full_url;
+        }
+
+        return $displayUrl . $redirectUrl;
+    }
+
+    private static function renderStatus(SeoPage $page)
+    {
+        $status = SeoPageStatus::getKey($page->status);
+        if ($page->status === SeoPageStatus::LIVE) {
+            return "<strong class='text-success'>$status</strong>";
+        } else {
+            return "<strong class='text-danger'>$status</strong>";
+        }
     }
 }
