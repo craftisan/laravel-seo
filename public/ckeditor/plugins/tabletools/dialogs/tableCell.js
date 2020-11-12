@@ -1,9 +1,7 @@
-/*
- * @copyright Copyright (c) 2020 Deekshant Joshi
- *
- * @author    Deekshant Joshi (deekshant.joshi@gmail.com)
- * @since     10 June 2020
- */
+﻿/*
+ Copyright (c) 2003-2020, CKSource - Frederico Knabben. All rights reserved.
+ For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+*/
 CKEDITOR.dialog.add("cellProperties",function(h){function k(a){return{isSpacer:!0,type:"html",html:"\x26nbsp;",requiredContent:a?a:void 0}}function r(){return{type:"vbox",padding:0,children:[]}}function t(a){return{requiredContent:"td{"+a+"}",type:"hbox",widths:["70%","30%"],children:[{type:"text",id:a,width:"100px",label:e[a],validate:n.number(d["invalid"+CKEDITOR.tools.capitalize(a)]),onLoad:function(){var b=this.getDialog().getContentElement("info",a+"Type").getElement(),c=this.getInputElement(),
 d=c.getAttribute("aria-labelledby");c.setAttribute("aria-labelledby",[d,b.$.id].join(" "))},setup:f(function(b){var c=parseFloat(b.getAttribute(a),10);b=parseFloat(b.getStyle(a),10);if(!isNaN(b))return b;if(!isNaN(c))return c}),commit:function(b){var c=parseFloat(this.getValue(),10),d=this.getDialog().getValueOf("info",a+"Type")||u(b,a);isNaN(c)?b.removeStyle(a):b.setStyle(a,c+d);b.removeAttribute(a)},"default":""},{type:"select",id:a+"Type",label:h.lang.table[a+"Unit"],labelStyle:"visibility:hidden;display:block;width:0;overflow:hidden",
 "default":"px",items:[[p.widthPx,"px"],[p.widthPc,"%"]],setup:f(function(b){return u(b,a)})}]}}function f(a){return function(b){for(var c=a(b[0]),d=1;d<b.length;d++)if(a(b[d])!==c){c=null;break}"undefined"!=typeof c&&(this.setValue(c),CKEDITOR.env.gecko&&"select"==this.type&&!c&&(this.getInputElement().$.selectedIndex=-1))}}function u(a,b){var c=/^(\d+(?:\.\d+)?)(px|%)$/.exec(a.getStyle(b)||a.getAttribute(b));if(c)return c[2]}function v(a,b){h.getColorFromDialog(function(c){c&&a.getDialog().getContentElement("info",

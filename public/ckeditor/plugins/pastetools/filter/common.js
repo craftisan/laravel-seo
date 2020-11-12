@@ -1,9 +1,7 @@
-/*
- * @copyright Copyright (c) 2020 Deekshant Joshi
- *
- * @author    Deekshant Joshi (deekshant.joshi@gmail.com)
- * @since     10 June 2020
- */
+﻿/*
+ Copyright (c) 2003-2020, CKSource - Frederico Knabben. All rights reserved.
+ For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+*/
 (function(){function q(a){return/%$/.test(a)?a:a+"px"}function r(a){var b=a.margin?"margin":a.MARGIN?"MARGIN":!1,c,e;if(b){e=CKEDITOR.tools.style.parse.margin(a[b]);for(c in e)a["margin-"+c]=e[c];delete a[b]}}function t(a){var b="background-color:transparent;background:transparent;background-color:none;background:none;background-position:initial initial;background-repeat:initial initial;caret-color;font-family:-webkit-standard;font-variant-caps;letter-spacing:normal;orphans;widows;text-transform:none;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px;text-indent:0px;margin-bottom:0in".split(";"),
 c=CKEDITOR.tools.parseCssText(a.attributes.style),e,f;for(e in c)f=e+":"+c[e],CKEDITOR.tools.array.some(b,function(a){return f.substring(0,a.length).toLowerCase()===a})&&delete c[e];c=CKEDITOR.tools.writeCssText(c);""!==c?a.attributes.style=c:delete a.attributes.style}function u(a){a=a.config.font_names;var b=[];if(!a||!a.length)return!1;b=CKEDITOR.tools.array.map(a.split(";"),function(a){return-1===a.indexOf("/")?a:a.split("/")[1]});return b.length?b:!1}function v(a,b){var c=a.split(",");return CKEDITOR.tools.array.find(b,
 function(a){for(var f=0;f<c.length;f++)if(-1===a.indexOf(CKEDITOR.tools.trim(c[f])))return!1;return!0})||a}var h,l=CKEDITOR.tools,p={};CKEDITOR.plugins.pastetools.filters.common=p;p.rules=function(a,b,c){var e=u(b);return{elements:{"^":function(a){t(a);if(a.attributes.bgcolor){var b=CKEDITOR.tools.parseCssText(a.attributes.style);b["background-color"]||(b["background-color"]=a.attributes.bgcolor,a.attributes.style=CKEDITOR.tools.writeCssText(b))}},span:function(a){if(a.hasClass("Apple-converted-space"))return new CKEDITOR.htmlParser.text(" ")},
