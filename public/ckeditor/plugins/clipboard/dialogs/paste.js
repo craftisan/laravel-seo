@@ -1,9 +1,7 @@
-/*
- * @copyright Copyright (c) 2020 Deekshant Joshi
- *
- * @author    Deekshant Joshi (deekshant.joshi@gmail.com)
- * @since     10 June 2020
- */
+﻿/*
+ Copyright (c) 2003-2020, CKSource - Frederico Knabben. All rights reserved.
+ For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+*/
 CKEDITOR.dialog.add("paste",function(c){function k(a){var b=new CKEDITOR.dom.document(a.document),g=b.getBody(),d=b.getById("cke_actscrpt");d&&d.remove();g.setAttribute("contenteditable",!0);g.on(e.mainPasteEvent,function(a){a=e.initPasteDataTransfer(a);f?a!=f&&(f=e.initPasteDataTransfer()):f=a});if(CKEDITOR.env.ie&&8>CKEDITOR.env.version)b.getWindow().on("blur",function(){b.$.selection.empty()});b.on("keydown",function(a){a=a.data;var b;switch(a.getKeystroke()){case 27:this.hide();b=1;break;case 9:case CKEDITOR.SHIFT+
 9:this.changeFocus(1),b=1}b&&a.preventDefault()},this);c.fire("ariaWidget",new CKEDITOR.dom.element(a.frameElement));b.getWindow().getFrame().removeCustomData("pendingFocus")&&g.focus()}var h=c.lang.clipboard,e=CKEDITOR.plugins.clipboard,f;c.on("pasteDialogCommit",function(a){a.data&&c.fire("paste",{type:"auto",dataValue:a.data.dataValue,method:"paste",dataTransfer:a.data.dataTransfer||e.initPasteDataTransfer()})},null,null,1E3);return{title:h.paste,minWidth:CKEDITOR.env.ie&&CKEDITOR.env.quirks?370:
 350,minHeight:CKEDITOR.env.quirks?250:245,onShow:function(){this.parts.dialog.$.offsetHeight;this.setupContent();this._.committed=!1},onLoad:function(){(CKEDITOR.env.ie7Compat||CKEDITOR.env.ie6Compat)&&"rtl"==c.lang.dir&&this.parts.contents.setStyle("overflow","hidden")},onOk:function(){this.commitContent()},contents:[{id:"general",label:c.lang.common.generalTab,elements:[{type:"html",id:"pasteMsg",html:'\x3cdiv style\x3d"white-space:normal;width:340px"\x3e'+h.pasteMsg+"\x3c/div\x3e"},{type:"html",
